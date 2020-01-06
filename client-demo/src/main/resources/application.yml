@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    active: @profileActive@
+  redis:
+    host: 122.51.84.22
+    password: xxx1arxxx!!!
