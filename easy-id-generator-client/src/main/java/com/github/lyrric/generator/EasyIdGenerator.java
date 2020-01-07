@@ -2,6 +2,8 @@ package com.github.lyrric.generator;
 
 import com.github.lyrric.properties.ClientConfigProperties;
 import com.github.lyrric.tool.IdGeneratorTool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +26,8 @@ public class EasyIdGenerator {
     @Resource
     private IdGeneratorTool idGeneratorTool;
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     private GeneratorThread generatorThread = new GeneratorThread();
@@ -36,15 +40,21 @@ public class EasyIdGenerator {
         int minSize = clientConfigProperties.getIdListMinSize();
         //noinspection ConstantConditions
         if(template.opsForList().size(clientConfigProperties.getIdListRedisKey()) < minSize){
+
             executorService.submit(generatorThread);
         }
         return id;
     }
 
     class GeneratorThread implements Runnable{
+
+        private Logger logger = LoggerFactory.getLogger(this.getClass());
+
         @Override
         public void run() {
+            logger.info("#######################################start to GeneratorThread thread################################################");
             idGeneratorTool.addIds();
+            logger.info("#######################################end to GeneratorThread thread################################################");
         }
     }
 

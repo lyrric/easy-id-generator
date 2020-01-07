@@ -43,6 +43,8 @@ public class IdGeneratorTool {
             if(template.opsForValue().setIfAbsent(redisLockKey, String.valueOf(System.currentTimeMillis()), redisLockTime, TimeUnit.MILLISECONDS)){
                 try {
                     String lastId = template.opsForList().leftPop(idListKey);
+                    logger.info("-----------------------------------------redis pop--------------------------------------");
+                    logger.info("-----------------------------------------last id is {}--------------------------------------", lastId);
                     template.opsForList().leftPushAll(idListKey, idGenerator.generator(lastId, count));
                 }catch (Exception e){
                     e.printStackTrace();
