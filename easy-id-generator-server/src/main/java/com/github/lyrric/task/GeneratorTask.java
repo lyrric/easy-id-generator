@@ -3,12 +3,15 @@ package com.github.lyrric.task;
 import com.github.lyrric.core.ServerConfigProperties;
 import com.github.lyrric.generator.DefaultIdGenerator;
 import com.github.lyrric.generator.IdGenerator;
+import com.github.lyrric.util.MyBeanUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.nio.charset.CoderResult;
 import java.util.concurrent.TimeUnit;
@@ -28,7 +31,19 @@ public class GeneratorTask {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private IdGenerator idGenerator = new DefaultIdGenerator();
+    private IdGenerator idGenerator;
+
+    @Autowired(required = false)
+    public GeneratorTask(IdGenerator idGenerator) {
+        //如果未自定义id生成策略，则使用默认的策略
+        if(idGenerator == null){
+            this.idGenerator = new DefaultIdGenerator();
+        }else{
+            this.idGenerator = idGenerator;
+        }
+    }
+
+
     /**
      * 定时任务，检查id数量是否小于最小值时，生成id
      */

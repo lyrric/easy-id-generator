@@ -2,11 +2,13 @@ package com.github.lyrric.generator;
 
 import com.github.lyrric.properties.ClientConfigProperties;
 import com.github.lyrric.tool.IdGeneratorTool;
+import com.github.lyrric.tool.MyBeanUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -31,6 +33,7 @@ public class EasyIdGenerator {
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     private GeneratorThread generatorThread = new GeneratorThread();
+
     /**
      * 获取ID
      * @return
@@ -53,9 +56,8 @@ public class EasyIdGenerator {
 
         @Override
         public void run() {
-            logger.info("#######################################start to GeneratorThread thread################################################");
             idGeneratorTool.addIds();
-            logger.info("#######################################end to GeneratorThread thread################################################");
+
         }
     }
 

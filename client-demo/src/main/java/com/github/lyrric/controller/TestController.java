@@ -20,7 +20,10 @@ public class TestController {
     private EasyIdGenerator easyIdGenerator;
 
     @GetMapping(value = "/test")
-    String test(){
+    String test(int count){
+        for (int i = 0; i < count; i++) {
+            easyIdGenerator.get();
+        }
         return easyIdGenerator.get();
     }
 }

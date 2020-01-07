@@ -1,5 +1,7 @@
 package com.github.lyrric.generator;
 
+import com.sun.istack.internal.Nullable;
+
 import java.util.List;
 
 /**
@@ -15,5 +17,5 @@ public interface IdGenerator {
      * @param count 生成的数量
      * @return
      */
-    List<String> generator(String lastId, int count);
+    List<String> generator(@Nullable String lastId, int count);
 }

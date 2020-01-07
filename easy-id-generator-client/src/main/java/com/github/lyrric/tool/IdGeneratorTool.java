@@ -5,11 +5,12 @@ import com.github.lyrric.generator.IdGenerator;
 import com.github.lyrric.properties.ClientConfigProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -27,8 +28,24 @@ public class IdGeneratorTool {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-    private IdGenerator idGenerator = new DefaultIdGenerator();
+    private IdGenerator idGenerator;
 
+    @Autowired(required = false)
+    public IdGeneratorTool(IdGenerator idGenerator) {
+        //如果未自定义id生成策略，则使用默认的策略
+        if(idGenerator == null){
+            this.idGenerator = new DefaultIdGenerator();
+        }else{
+            this.idGenerator = idGenerator;
+        }
+    }
+
+    @PostConstruct
+    private void init(){
+        //如果未定义了id生成策略，则使用默认的生成策略
+        //idGenerator = MyBeanUtil.getObject(IdGenerator.class);
+
+    }
     public void addIds(){
         int minSize = clientConfigProperties.getIdListMinSize();
         String redisLockKey = clientConfigProperties.getRedisLockKey();
