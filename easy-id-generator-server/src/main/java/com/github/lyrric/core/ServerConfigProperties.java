@@ -2,6 +2,7 @@ package com.github.lyrric.core;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
  * Created on 2019/3/14.
@@ -14,7 +15,11 @@ public class ServerConfigProperties {
     /**
      * lock key
      */
-    private String lockRedisKey = "id:generator:lock";
+    private String redisLockKey = "id:generator:lock";
+    /**
+     * lock time,unit millisecond
+     */
+    private int redisLockTime = 5000;
     /**
      * to save id list
      */

@@ -1,3 +1,8 @@
 spring:
   profiles:
     active: @profileActive@
+
+easy:
+  generator:
+    server:
+      idListDefaultSize: 100

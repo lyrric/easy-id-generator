@@ -38,10 +38,11 @@ public class EasyIdGenerator {
     public String get(){
         String id = template.opsForList().rightPop(clientConfigProperties.getIdListRedisKey());
         int minSize = clientConfigProperties.getIdListMinSize();
-        //noinspection ConstantConditions
-        if(template.opsForList().size(clientConfigProperties.getIdListRedisKey()) < minSize){
-
-            executorService.submit(generatorThread);
+        if("client".equals(clientConfigProperties.getGeneratorModel())){
+            //noinspection ConstantConditions
+            if(template.opsForList().size(clientConfigProperties.getIdListRedisKey()) < minSize){
+                executorService.submit(generatorThread);
+            }
         }
         return id;
     }

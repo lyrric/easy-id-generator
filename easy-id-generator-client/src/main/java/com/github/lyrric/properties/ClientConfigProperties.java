@@ -11,6 +11,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "easy.generator.client")
 @Data
 public class ClientConfigProperties {
+
+    /**
+     * generator in client or server
+     */
+    private String generatorModel = "client";
     /**
      * lock key
      */
