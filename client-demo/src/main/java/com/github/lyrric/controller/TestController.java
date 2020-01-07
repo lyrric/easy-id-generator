@@ -19,15 +19,8 @@ public class TestController {
     @Resource
     private EasyIdGenerator easyIdGenerator;
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @GetMapping(value = "/test")
-    String index(int count){
-        for(int i=0;i<count;i++){
-            logger.info(easyIdGenerator.get());
-        }
-        return "";
+    String test(){
+        return easyIdGenerator.get();
     }
-
-
 }

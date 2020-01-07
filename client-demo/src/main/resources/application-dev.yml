@@ -7,4 +7,10 @@ spring:
 easy:
   generator:
     client:
-      generator-model: server
+      generator-model: client
+      redis-lock-key: id:generator:lock
+      redis-lock-time: 5000
+      id-list-redis-key: id:generator:list
+      id-list-default-size: 100
+      id-list-min-size: 50
+      id-list-increase-number: 50
