@@ -75,7 +75,6 @@ easy:
       redis-lock-key: id:generator:lock #当需要补充id时，实现分布式锁的key
       redis-lock-time: 5000 #分布式锁的最长设置时间，单位毫秒
       id-list-redis-key: id:generator:list #存储在redis中id list的key
-      id-list-default-size: 100 #id 默认数量
       id-list-min-size: 50 #当redis中的id数量小于此值时，会触发补充id操作
       id-list-increase-number: 50 #每次补充id的数量
 ```

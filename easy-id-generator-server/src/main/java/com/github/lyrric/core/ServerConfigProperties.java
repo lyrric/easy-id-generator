@@ -25,10 +25,6 @@ public class ServerConfigProperties {
      */
     private String idListRedisKey  = "id:generator:list";
     /**
-     * id list default size
-     */
-    private Integer idListDefaultSize = 100;
-    /**
      * id list min size
      */
     private Integer idListMinSize = 50;
