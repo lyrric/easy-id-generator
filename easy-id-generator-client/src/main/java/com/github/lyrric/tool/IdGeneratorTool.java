@@ -40,12 +40,6 @@ public class IdGeneratorTool {
         }
     }
 
-    @PostConstruct
-    private void init(){
-        //如果未定义了id生成策略，则使用默认的生成策略
-        //idGenerator = MyBeanUtil.getObject(IdGenerator.class);
-
-    }
     public void addIds(){
         int minSize = clientConfigProperties.getIdListMinSize();
         String redisLockKey = clientConfigProperties.getRedisLockKey();
