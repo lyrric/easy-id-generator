@@ -7,7 +7,7 @@ spring:
 easy:
   generator:
     client:
-      generator-model: client
+      generator-model: server
       redis-lock-key: id:generator:lock
       redis-lock-time: 5000
       id-list-redis-key: id:generator:list

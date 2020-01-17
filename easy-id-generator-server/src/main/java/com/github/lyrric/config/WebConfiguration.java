@@ -15,4 +15,9 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(ServerConfigProperties.class)
 @ComponentScan(basePackages = "com.github.lyrric")
 public class WebConfiguration {
+
+/*    @Bean
+    public RedisTemplate<String, Long> redisTemplate(){
+        return new RedisTemplate<>();
+    }*/
 }

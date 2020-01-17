@@ -23,7 +23,7 @@ public class ClientConfigProperties {
     /**
      * lock time,unit millisecond
      */
-    private int redisLockTime = 5000;
+    private int redisLockTime = 500;
     /**
      * to save id list
      */

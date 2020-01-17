@@ -2,6 +2,7 @@ package com.github.lyrric;
 
 import com.github.lyrric.properties.ClientConfigProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,5 +15,6 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(ClientConfigProperties.class)
 @ComponentScan(basePackages = "com.github.lyrric")
 public class EasyIdGeneratorConfiguration {
+
 
 }

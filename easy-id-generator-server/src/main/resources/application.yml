@@ -1,15 +1,6 @@
 spring:
-  profiles:
-    active: @profileActive@
   redis:
     host: 127.0.0.1
     password:
-easy:
-  generator:
-    server:
-      idListDefaultSize: 100
 server:
   port: 8081
-
-
-

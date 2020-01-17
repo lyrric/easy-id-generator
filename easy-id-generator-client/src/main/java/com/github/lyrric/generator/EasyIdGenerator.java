@@ -2,13 +2,12 @@ package com.github.lyrric.generator;
 
 import com.github.lyrric.properties.ClientConfigProperties;
 import com.github.lyrric.tool.IdGeneratorTool;
-import com.github.lyrric.tool.MyBeanUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,7 +21,7 @@ import java.util.concurrent.Executors;
 public class EasyIdGenerator {
 
     @Resource
-    private StringRedisTemplate template;
+    private RedisTemplate<String, Long> redisTemplate;
     @Resource
     private ClientConfigProperties clientConfigProperties;
     @Resource
@@ -38,12 +37,12 @@ public class EasyIdGenerator {
      * 获取ID
      * @return
      */
-    public String get(){
-        String id = template.opsForList().rightPop(clientConfigProperties.getIdListRedisKey());
+    public Long get(){
+        Long id = redisTemplate.opsForList().rightPop(clientConfigProperties.getIdListRedisKey());
         int minSize = clientConfigProperties.getIdListMinSize();
         if("client".equals(clientConfigProperties.getGeneratorModel())){
             //noinspection ConstantConditions
-            if(template.opsForList().size(clientConfigProperties.getIdListRedisKey()) < minSize){
+            if(redisTemplate.opsForList().size(clientConfigProperties.getIdListRedisKey()) < minSize){
                 executorService.submit(generatorThread);
             }
         }
@@ -57,7 +56,6 @@ public class EasyIdGenerator {
         @Override
         public void run() {
             idGeneratorTool.addIds();
-
         }
     }
 

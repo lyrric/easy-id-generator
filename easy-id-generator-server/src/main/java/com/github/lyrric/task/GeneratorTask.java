@@ -1,19 +1,18 @@
 package com.github.lyrric.task;
 
 import com.github.lyrric.core.ServerConfigProperties;
-import com.github.lyrric.generator.DefaultIdGenerator;
+import com.github.lyrric.generator.SnowFlakeIdGenerator;
 import com.github.lyrric.generator.IdGenerator;
-import com.github.lyrric.util.MyBeanUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.nio.charset.CoderResult;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,23 +24,23 @@ import java.util.concurrent.TimeUnit;
 public class GeneratorTask {
 
     @Resource
-    private StringRedisTemplate template;
+    private RedisTemplate<String, Long> redisTemplate;
+
     @Resource
     private ServerConfigProperties serverConfigProperties;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired(required = false)
     private IdGenerator idGenerator;
 
-    @Autowired(required = false)
-    public GeneratorTask(IdGenerator idGenerator) {
-        //如果未自定义id生成策略，则使用默认的策略
-        if(idGenerator == null){
-            this.idGenerator = new DefaultIdGenerator();
-        }else{
-            this.idGenerator = idGenerator;
-        }
-    }
+   @PostConstruct
+   private void init(){
+       //如果未自定义id生成策略，则使用默认的策略
+       if(idGenerator == null){
+           this.idGenerator = new SnowFlakeIdGenerator();
+       }
+   }
 
 
     /**
@@ -54,21 +53,19 @@ public class GeneratorTask {
         String idListKey = serverConfigProperties.getIdListRedisKey();
         int redisLockTime = serverConfigProperties.getRedisLockTime();
         int count = serverConfigProperties.getIdListIncreaseNumber();
-        Long size = template.opsForList().size(idListKey);
+        Long size = redisTemplate.opsForList().size(idListKey);
         //如果存在的ID数量小于最小值就开始生成ID
         if(size == null || size < minSize){
             //Redis分布式锁
+            List<Long> ids = idGenerator.generator(count);
             //noinspection ConstantConditions
-            if(template.opsForValue().setIfAbsent(redisLockKey, String.valueOf(System.currentTimeMillis()), redisLockTime, TimeUnit.MILLISECONDS)){
+            if(redisTemplate.opsForValue().setIfAbsent(redisLockKey, System.currentTimeMillis(), redisLockTime, TimeUnit.MILLISECONDS)){
                 try {
-                    String lastId = template.opsForList().leftPop(idListKey);
-                    logger.info("-----------------------------------------redis pop--------------------------------------");
-                    logger.info("-----------------------------------------last id is {}--------------------------------------", lastId);
-                    template.opsForList().leftPushAll(idListKey, idGenerator.generator(lastId, count));
+                    redisTemplate.opsForList().leftPushAll(idListKey, ids);
                 }catch (Exception e){
                     e.printStackTrace();
                 }finally {
-                    template.delete(redisLockKey);
+                    redisTemplate.delete(redisLockKey);
                 }
             }
         }

@@ -13,9 +13,8 @@ public interface IdGenerator {
 
     /**
      * 生产id
-     * @param lastId 最后一个id
      * @param count 生成的数量
      * @return
      */
-    List<String> generator(@Nullable String lastId, int count);
+    List<Long> generator(int count);
 }

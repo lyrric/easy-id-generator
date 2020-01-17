@@ -18,7 +18,7 @@ public class TestController {
 
     @GetMapping(value = "/test")
     String index(int id){
-        return serverConfigProperties.getIdListDefaultSize().toString();
+        return null;
     }
 
 

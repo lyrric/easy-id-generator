@@ -27,7 +27,7 @@ public class ServerConfigProperties {
     /**
      * id list min size
      */
-    private Integer idListMinSize = 50;
+    private Integer idListMinSize = 200;
     /**
      * each time add id number
      */

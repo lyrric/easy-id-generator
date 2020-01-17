@@ -1,9 +1,6 @@
 package com.github.lyrric.controller;
 
 import com.github.lyrric.generator.EasyIdGenerator;
-import com.github.lyrric.generator.IdGenerator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,9 +17,9 @@ public class TestController {
     private EasyIdGenerator easyIdGenerator;
 
     @GetMapping(value = "/test")
-    String test(int count){
+    Long test(int count){
         for (int i = 0; i < count; i++) {
-            easyIdGenerator.get();
+            System.out.println(easyIdGenerator.get());
         }
         return easyIdGenerator.get();
     }
